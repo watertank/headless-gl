@@ -208,6 +208,9 @@ exports.WebGLDrawingBufferWrapper = WebGLDrawingBufferWrapper
 function ANGLE_instanced_arrays () {
 }
 
+function OES_texture_float () {
+}
+
 function STACKGL_resize_drawingbuffer () {
 }
 
@@ -667,6 +670,7 @@ gl.getContextAttributes = function () {
 gl.getSupportedExtensions = function getSupportedExtensions () {
   return [
     'ANGLE_instanced_arrays',
+    'OES_texture_float',
     'STACKGL_resize_drawingbuffer',
     'STACKGL_destroy_context'
   ]
@@ -871,7 +875,7 @@ function createANGLEInstancedArrays (context) {
   }
   return result
 }
-
+// var extTextureFloat = this._extensions.oes_texture_float
 gl.getExtension = function getExtension (name) {
   var str = name.toLowerCase()
   if (str in this._extensions) {
@@ -881,6 +885,9 @@ gl.getExtension = function getExtension (name) {
   switch (str) {
     case 'angle_instanced_arrays':
       ext = createANGLEInstancedArrays(this)
+      break
+    case 'oes_texture_float':
+      ext = new OES_texture_float()
       break
     case 'stackgl_destroy_context':
       ext = new STACKGL_destroy_context()
@@ -3413,6 +3420,14 @@ function computePixelSize (context, type, internalformat) {
       }
       return 2
   }
+
+  var extTextureFloat = context._extensions.oes_texture_float
+  if (extTextureFloat) {
+    if (type === gl.FLOAT) {
+      return pixelSize * 4
+    }
+  }
+
   setError(context, gl.INVALID_ENUM)
   return 0
 }
@@ -3451,17 +3466,20 @@ function checkDimensions (
 }
 
 function convertPixels (pixels) {
+  console.log('sintance: ', pixels instanceof Float32Array)
   if (typeof pixels === 'object' && pixels !== null) {
     if (pixels instanceof ArrayBuffer) {
       return new Uint8Array(pixels)
     } else if (pixels instanceof Uint8Array ||
       pixels instanceof Uint16Array ||
-      pixels instanceof Uint8ClampedArray) {
+      pixels instanceof Uint8ClampedArray ||
+      pixels instanceof Float32Array) {
       return unpackTypedArray(pixels)
     } else if (pixels instanceof Buffer) {
       return new Uint8Array(pixels)
     }
   }
+  console.log('WWWWWWWWWWWWWW RETURNING NULL')
   return null
 }
 
