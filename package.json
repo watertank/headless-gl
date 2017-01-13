@@ -11,7 +11,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "standard | snazzy && tape test/*.js | faucet",
+    "test": "standard | snazzy && tape test/*.js",
     "rebuild": "node-gyp rebuild --verbose",
     "prebuild": "prebuild --all --strip",
     "install": "prebuild --install"
@@ -27,7 +27,6 @@
   "devDependencies": {
     "angle-normals": "^1.0.0",
     "bunny": "^1.0.1",
-    "faucet": "0.0.1",
     "gl-conformance": "^2.0.9",
     "snazzy": "^3.0.0",
     "standard": "^6.0.8",
