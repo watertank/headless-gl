@@ -4,7 +4,7 @@ var bits = require('bit-twiddle')
 var nativeGL = require('bindings')('webgl')
 var tokenize = require('glsl-tokenizer/string')
 
-var HEADLESS_VERSION = require('./package.json').version
+// var HEADLESS_VERSION = require('./package.json').version
 
 // These are defined by the WebGL spec
 var MAX_UNIFORM_LENGTH = 256
@@ -2436,14 +2436,12 @@ gl.getParameter = function getParameter (pname) {
       return activeTextureUnit(this)._bind2D
     case gl.TEXTURE_BINDING_CUBE_MAP:
       return activeTextureUnit(this)._bindCube
+
     case gl.VERSION:
-      return 'WebGL 1.0 stack-gl ' + HEADLESS_VERSION
     case gl.VENDOR:
-      return 'stack-gl'
     case gl.RENDERER:
-      return 'ANGLE'
     case gl.SHADING_LANGUAGE_VERSION:
-      return 'WebGL GLSL ES 1.0 stack-gl'
+      return _getParameter.call(this, pname)
 
     case gl.COMPRESSED_TEXTURE_FORMATS:
       return new Uint32Array(0)
